@@ -1,0 +1,69 @@
+#
+# Deploying a network and a compute instance using Heat
+#
+heat_template_version: 2013-05-23
+
+description: >
+  Deploying new network, subnet and a server using Heat.
+
+parameters:
+  key_name:
+    type: string
+    description: Name of an existing key pair to use for the server
+    default: asad-testing-key
+    constraints:
+      - custom_constraint: nova.keypair
+  vm_name:
+    type: string
+    description: Name of an existing key pair to use for the server
+    default: fortigate-vm
+
+
+  flavour:
+    type: string
+    description: Flavor for the server to be created
+    default: m1.medium
+    constraints:
+      - custom_constraint: nova.flavor
+  image:
+    type: string
+    description: Image ID or image name to use for the server
+    default: Fortigate
+    constraints:
+      - custom_constraint: glance.image
+
+
+  network-ext:
+    type: string
+    description: (existing) network for the server to be created
+    default: external
+    constraints:
+      - custom_constraint: neutron.network
+
+  network-pvt:
+    type: string
+    description: (existing) network for the server to be created
+    default: private
+    constraints:
+      - custom_constraint: neutron.network
+
+
+
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      name: { get_param: vm_name }
+      key_name: { get_param: key_name }
+      image: { get_param: image }
+      flavor: { get_param: flavour }
+      personality: {"/FGVM01TM20002897.lic": {get_file: "/home/asad/FORTIGATE_CODE/FGVM01TM20002897.lic"}}
+      security_groups:
+        - default
+      networks:
+        - network: {get_param: network-ext}
+        - network: {get_param: private_net}
+      user_data_format: SOFTWARE_CONFIG
+      user_data: {get_file: user_data}
+  
+           

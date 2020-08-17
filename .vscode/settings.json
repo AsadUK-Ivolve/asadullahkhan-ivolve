@@ -1,0 +1,5 @@
+{
+    "python.dataScience.showKernelSelectionOnInteractiveWindow": true,
+    "python.pythonPath": "/usr/bin/python",
+
+}

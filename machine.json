@@ -1,0 +1,14 @@
+{
+    "machines": [
+{"vm_name": "Fortigate",
+"private_netowrk" : "private",
+"external_network" : "external",
+"license_file" : "abc.lic",
+"flavour" : "m1.small",
+"key_pair" : "asad-testing-key",
+"image":"fortigate"
+   
+}
+]
+
+}
