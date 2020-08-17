@@ -1,0 +1,7 @@
+Image banner: 		/boot/grub 				(replace image in this folder)
+First textual banner:   /opt/bitnami/var/data/welcome_message.d (change text of header and footer file)
+Second textual banner:	/etc/motd 				(change text in motd file)				
+
+Add a user with below credentials make him a sudo user
+user : ivolve
+pass: ivolve

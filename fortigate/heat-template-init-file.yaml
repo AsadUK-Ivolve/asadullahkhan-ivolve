@@ -1,0 +1,41 @@
+heat_template_version: 2015-10-15
+description: Launch a basic instance with CirrOS image`
+
+resources:
+  script1:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config: {get_file: script1.sh}
+         
+  script2:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config: {get_file: script2.sh}
+         
+  server_init:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+        - config: {get_resource: script1}
+        - config: {get_resource: script2}
+
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: ubuntu
+      flavor: ubuntu
+      key_name: mykey
+      networks:
+      - network: net-101
+      user_data_format: SOFTWARE_CONFIG
+      user_data: {get_resource: server_init} 
+
+outputs:
+  instance_name:
+    description: Name of the instance.
+    value: { get_attr: [ server, name ] }
+  instance_ip:
+    description: IP address of the instance.
+    value: { get_attr: [ server, first_address ] }
